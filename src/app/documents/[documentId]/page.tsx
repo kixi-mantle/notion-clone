@@ -1,5 +1,6 @@
 import React from 'react'
 import Editor from './editor'
+import { Toolbar } from './Toolbar'
 
 export default async function page({ params } : { params : Promise<{documentId : string}>}) {
    
@@ -7,7 +8,8 @@ export default async function page({ params } : { params : Promise<{documentId :
   
     return (
     <div className='min-h-screen bg-[#F4F5F7]'>
-      id: {documentId}
+      <Toolbar/>
+
       <Editor/>
     </div>
   )

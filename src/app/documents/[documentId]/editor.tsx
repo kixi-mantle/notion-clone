@@ -11,6 +11,8 @@ import TableRow from '@tiptap/extension-table-row'
 import Image from "@tiptap/extension-image"
 import ImageResize from "tiptap-extension-resize-image"
 import { useEditorStore } from '../../../../store/use-editor-store';
+import FontFamily from '@tiptap/extension-font-family'
+import TextStyle from '@tiptap/extension-text-style';
 
 
 function Editor() {
@@ -37,7 +39,10 @@ function Editor() {
     onFocus({ editor }){
       setEditor(editor);
     },
-    onTransaction({ editor }){
+    onBlur({ editor }){
+      setEditor(editor);
+    },
+    onContentError({ editor }){
       setEditor(editor);
     },
     editorProps : {
@@ -48,6 +53,8 @@ function Editor() {
     },
     extensions : [
       StarterKit,
+      FontFamily ,
+      TextStyle,
       TaskItem.configure({
         nested: true
       }),

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Navbar } from "../(home)/Navbar" 
+import { Navbar } from "./Navbar" 
 
 const Home =() =>{
     return (

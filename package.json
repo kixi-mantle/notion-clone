@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "drizzle-generate": " drizzle-kit generate --config=drizzle.config.ts",
+    "drizzle-push": " drizzle-kit push --config=drizzle.config.ts",
+    "drizzle-pull": " drizzle-kit pull --config=drizzle.config.ts",
+    "drizzle-migrate": " drizzle-kit migrate --config=drizzle.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -53,11 +57,15 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.43.1",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.511.0",
     "next": "15.0.3",
     "next-themes": "^0.4.6",
+    "nuqs": "^2.2.3",
+    "pg": "^8.16.0",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-day-picker": "^8.10.1",
     "react-dom": "19.0.0-rc-66855b96-20241106",
@@ -74,12 +82,15 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pg": "^8.15.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "drizzle-kit": "^0.31.1",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.4",
     "typescript": "^5"
   }
 }

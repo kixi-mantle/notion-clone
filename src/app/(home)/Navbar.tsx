@@ -1,8 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
+import { SearchInput } from "./SearchInput"
 
 
 export const Navbar = ()=>{
+    
     return (
         <nav className="flex items-center justify-between h-full w-full">
             <div className="flex gap-3 items-center shrink-0 pr-6">
@@ -13,6 +15,8 @@ export const Navbar = ()=>{
             Docs
             </h3>
             </div>
+            <div className="flex-1 flex justify-center"><SearchInput/></div>
+            <div></div>
         </nav>
     )
 }

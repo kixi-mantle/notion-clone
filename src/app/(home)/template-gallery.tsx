@@ -4,13 +4,17 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { cn } from "../../lib/utils";
 import { templates } from "../../contansts/template";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createDocument } from "../../../drizzle/queries/document";
 
 
 
 
 
-export const TemplateGallery = ()=>{
+export const TemplateGallery = ({id} : {id : string})=>{
     
+
+    const router = useRouter()
     
     const [isArrow , setIsArrow] = useState<boolean>(false)
     const CarouselRef = useRef<HTMLDivElement>(null);
@@ -29,7 +33,19 @@ export const TemplateGallery = ()=>{
         return () => window.removeEventListener("resize", checkScroll);
     }, []);
     
-
+          const createDoc = async()=>{
+            const data = {
+                    title: "Untitled_Doc",
+                    content: null,
+                    ownerId: id, // id must be a non-empty string
+                    roomId: null,
+                    organizationId: null,
+            }
+            const res = await createDocument(data);
+            if(res.success && res.data){
+                router.push(`/documents/${res.data.id}`)
+            }
+          }
     return (
         <div className="bg-[#F1F3F4]">
             <div className="max-w-screen-xl  mx-auto px-16 py-6 flex flex-col gap-y-4">
@@ -41,7 +57,7 @@ export const TemplateGallery = ()=>{
                       {templates.map((template)=>(
                         <CarouselItem
                         key={template.id}
-                        className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/4 xl:basis-1/6 2xl:basis-[14.2857145] pl-4  text-center">
+                        className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/4 xl:basis-1/6 2xl:basis-[14.2857145] pl-4  text-center " onClick={()=>createDoc()}>
                                     <div className={cn(
                                         "aspect-[3/4] flex flex-col gap-y-2.5",
                                         isCreating && "ponter-events-none opacity-50"

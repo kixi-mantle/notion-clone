@@ -13,8 +13,8 @@ export const UserSchema = z.object({
 
 export const DocumentSchema = z.object({
     title : z.string().nullable(),
-    initialContent: z.string().nullable(),
+    content: z.string().nullable(),
     ownerId : z.string().min(1, "ownerId is required"),
     roomId : z.string().nullable(),
-    organization : z.string().nullable(),
+    organizationId : z.string().nullable(),
 })

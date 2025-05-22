@@ -4,14 +4,18 @@ import Image from "next/image"
 import Link from "next/link"
 import {  DocumentInput } from "./document-input";
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarSub, MenubarSubContent, MenubarSubTrigger, MenubarTrigger } from "../../../components/ui/menubar";
-import { FileIcon, FileJsonIcon, FilePenIcon, FilePlusIcon, FileTextIcon, GlobeIcon, PrinterIcon, TrashIcon } from "lucide-react";
+import { DownloadIcon, FileIcon, FileJsonIcon, FilePenIcon, FilePlusIcon, FileTextIcon, GlobeIcon, PrinterIcon, TrashIcon } from "lucide-react";
 import { useEditorStore } from "../../../../store/use-editor-store";
+import { Dialog,DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "../../../components/ui/dialog";
+import { Input } from "../../../components/ui/input";
+import { useState } from "react";
+import { Button } from "../../../components/ui/button";
 
 
 
 
 
-export const Navbar = ()=>{
+export const Navbar = ({title , id}: {title? : string | null | undefined , id : string | null | undefined  } )=>{
     const{editor} = useEditorStore()
 
     const onDownload = (blob : Blob , filename : string)=>{
@@ -51,6 +55,13 @@ export const Navbar = ()=>{
         })
         onDownload(blob , 'document.txt')
     }
+
+     const [name, setname] = useState(title||"New Document")
+     const [renameDialog, setrenameDialog] = useState(false)
+
+     const 
+
+     
     return (
         <nav className=" flex items-center justify-between ">
             <div className="flex gap-2 items-center p-2">
@@ -72,7 +83,7 @@ export const Navbar = ()=>{
                             <MenubarSub>
                                 <MenubarSubTrigger>
 
-                                <FileIcon className="size-4 mr-2"/> save
+                                <DownloadIcon className="size-4 mr-2"/> download
                                 </MenubarSubTrigger>
                                 <MenubarSubContent>
                                     <MenubarItem onClick={()=> onSaveJson()}>
@@ -93,6 +104,9 @@ export const Navbar = ()=>{
                                     </MenubarItem>
                                 </MenubarSubContent>
                             </MenubarSub>
+
+                                       
+
                                       
                                       <MenubarItem>
 
@@ -102,12 +116,32 @@ export const Navbar = ()=>{
                                       </MenubarItem>
                                       <MenubarSeparator/>
 
-                                       <MenubarItem>
+                                       
+                                       <Dialog open={renameDialog} onOpenChange={setrenameDialog}>
+                                        <DialogTrigger asChild>
+
+                                    <MenubarItem>
 
                                     <FilePenIcon className="size-4 mr-2" />
                                        Rename
                                     
                                       </MenubarItem>
+                                        </DialogTrigger>
+
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Save the file as</DialogTitle>
+                                            </DialogHeader>
+                                                <div className="mt-4">
+                                                    <Input value={name} onChange={(e)=>setname(e.target.value)}/>
+                                                </div>
+                                        </DialogContent>
+                                        <DialogFooter>
+                                                <Button onClick={handleRename}>Save</Button>
+                                                <Button variant='destructive'>cancle</Button>
+                                        </DialogFooter>
+                                       </Dialog>
+
                                        <MenubarItem>
 
                                     <TrashIcon className="size-4 mr-2" />

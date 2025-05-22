@@ -1,12 +1,23 @@
 import Link from "next/link"
 import { Navbar } from "./Navbar" 
-import { TemplateGallery } from "./template-gallery"
 import { getUser } from "../../getUser"
+import DocumentTable from "../documents/documentTable"
+import { getDocumentsforUser } from "../../../drizzle/queries/document"
+import { cacheTag } from "next/dist/server/use-cache/cache-tag"
+import { UserCacheTag } from "../../cache/user"
+import { TemplateGallery } from "./template-gallery"
+import { Suspense } from "react"
+
+
+
+
 
 const Home = async() =>{
 
     const user = await getUser();
-    console.log(user);
+    const documents = await getDocuments(user!.id)
+
+
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -19,11 +30,25 @@ const Home = async() =>{
                     </Link> to go to document id
                 </div>
                 <div className="mt-16">
-                    <TemplateGallery/>
+                    <Suspense>
+
+                    <TemplateGallery id={user!.id}/>
+                    </Suspense>
                 </div>
+
+
+                
+
+                <DocumentTable documents={documents}/>
 
         </div>
     )
 }
 
 export default Home
+
+
+async function getDocuments( userId : string){
+    const documents = await getDocumentsforUser(userId)
+    return documents
+}

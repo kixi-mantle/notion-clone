@@ -6,9 +6,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '../../components/ui/button'
 import { ExternalLink, MoreVertical } from 'lucide-react'
 
+
+interface docMenu {
+  documentId : string , 
+  title : string | undefined | null, 
+  onNewTab : (id : string)=> void,
+}
+
 function DocumentMenu({
     documentId , title , onNewTab
-}) {
+} : docMenu) {
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>

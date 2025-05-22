@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { primaryKey } from "drizzle-orm/pg-core";
+import {  timestamp } from "drizzle-orm/pg-core";
 import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 
@@ -20,16 +20,16 @@ export const documentTable = pgTable("documents" , {
     ownerId : uuid().references(()=>userTable.id).notNull(),
     roomId : text(),
     organizationId : uuid().references(()=>organizationTable.id),
-})
+    createdAt : timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 
 
 export const organizationTable = pgTable("organizations", {
-  id: uuid("id").defaultRandom(),
-  name: text("name").notNull(),
-  ownerId: uuid("owner_id").notNull().references(() => userTable.id),
-}, (t) => ({
-  pk: primaryKey({ columns: [t.id, t.ownerId] }),
-}));
+  id: uuid().defaultRandom().primaryKey().notNull(),
+  name: text().notNull(),
+  ownerId: uuid().notNull().references(() => userTable.id),
+},);
 
 
 
@@ -43,16 +43,14 @@ export const organizationTable = pgTable("organizations", {
 
 
 //relations
-export const userTableRelations = relations(userTable, ({one ,  many }) => ({
+export const userTableRelations = relations(userTable, ({  many }) => ({
   documents: many(documentTable, {
     relationName: "userDocuments",
   }),
 
-  owner : one(organizationTable , {
-    fields :  [userTable.id], 
-    references : [organizationTable.ownerId],
-    relationName : "organizationOwner"
-  })
+  ownedOrganizations: many(organizationTable, {
+    relationName: "organizationOwner",
+  }),
 }));
  
 export const documentTableRelations = relations(documentTable, ({ one  }) => ({
@@ -65,16 +63,20 @@ export const documentTableRelations = relations(documentTable, ({ one  }) => ({
   organization : one(organizationTable  , {
      fields :  [documentTable.organizationId], 
     references : [organizationTable.id],
-    relationName : "organization" 
+    relationName : "documentOrganization" 
   }
 
   )
 }));
 
-export const organizationTableRelations = relations(organizationTable , ({many})=>({
+export const organizationTableRelations = relations(organizationTable , ({many , one})=>({
   documents : many(documentTable , {
     relationName : 'organization-docs'
-  }
+  } ),
+  owner: one(userTable, {
+    fields: [organizationTable.ownerId],
+    references: [userTable.id],
+    relationName: "organizationOwner",
+  }),
     
-  )
 }))

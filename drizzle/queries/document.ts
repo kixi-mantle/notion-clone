@@ -48,14 +48,31 @@ export const getDocument = async(id:string) =>{
   const document = await db.query.documentTable.findFirst({
     where : eq(documentTable.id , id)
   })
-  if(!document) return "document not found"
+  if(!document) return null
   
   return document;
 }
 
 
 
-// export const updateDocument = async({data , id}: { id : string}) =>{
+export const updateDocument = async({data , id}: { id : string , data : { title? : string , content? : Record<string , unknown> }} ) =>{
       
-//   const [documents] = await db.update(documentTable).set({...data}).where({eq(documentTable.id , id)})
-// }
+  const [updatedDocs] = await db.update(documentTable).set({...data}).where(eq(documentTable.id , id)).returning();
+
+  return {data : updatedDocs , success : true}
+}
+
+export const deleteDocument = async({documentId , userId} : {
+  documentId : string , 
+  userId : string
+}) =>{
+  const document =  await db.query.documentTable.findFirst({
+    where : eq(documentTable.id , documentId)
+  }) 
+  if (document?.ownerId != userId){
+    return null
+  }
+  await db.delete(documentTable).where(eq(documentTable.id , documentId))
+
+  return {success : true}
+}

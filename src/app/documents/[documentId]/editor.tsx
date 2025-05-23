@@ -15,7 +15,7 @@ import FontFamily from '@tiptap/extension-font-family'
 import TextStyle from '@tiptap/extension-text-style';
 
 
-function Editor() {
+function Editor({content} : {content : Record<string , unknown> | null | undefined} ) {
 
   const { setEditor } = useEditorStore();
 
@@ -66,7 +66,7 @@ function Editor() {
       Image,
       ImageResize
     ],
-    content : '<p>hellp world </p>',
+    content : content,
   })
 
   return (

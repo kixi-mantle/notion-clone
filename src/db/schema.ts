@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import {  timestamp } from "drizzle-orm/pg-core";
+import {  jsonb, timestamp } from "drizzle-orm/pg-core";
 import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 
@@ -15,8 +15,8 @@ export const userTable= pgTable("users" , {
 
 export const documentTable = pgTable("documents" , {
     id : uuid().primaryKey().defaultRandom(),
-    title : text(),
-    content : text(),
+    title : text().notNull(),
+    content : jsonb().$type<Record<string , unknown>>(),
     ownerId : uuid().references(()=>userTable.id).notNull(),
     roomId : text(),
     organizationId : uuid().references(()=>organizationTable.id),

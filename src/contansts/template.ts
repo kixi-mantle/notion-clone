@@ -3,14 +3,14 @@
 export const templates = [
     { id : 'blank' ,
      label : "blank Document" ,
-      imageUrl : './blank-document.svg'},
+      imageUrl : '/images/blank-document.svg'},
     { id : 'business-letter' ,
      label : "business letter" ,
-      imageUrl : './business-letter.svg'},
+      imageUrl : '/images/business-letter.svg'},
     { id : 'cover-letter' ,
      label : "cover letter" ,
-      imageUrl : './cover-letter.svg'},
+      imageUrl : '/images/cover-letter.svg'},
     { id : 'letter' ,
      label : "letter" ,
-      imageUrl : './letter.svg'},
+      imageUrl : '/images/letter.svg'},
     ]

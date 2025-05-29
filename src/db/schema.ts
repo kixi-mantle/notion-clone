@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import {  jsonb, timestamp } from "drizzle-orm/pg-core";
+import {  jsonb, primaryKey, timestamp } from "drizzle-orm/pg-core";
 import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 
@@ -17,7 +17,7 @@ export const documentTable = pgTable("documents" , {
     id : uuid().primaryKey().defaultRandom(),
     title : text().notNull(),
     content : jsonb().$type<Record<string , unknown>>(),
-    ownerId : uuid().references(()=>userTable.id).notNull(),
+    ownerId : uuid().references(()=>userTable.id , { onDelete : 'cascade'}).notNull(),
     roomId : text(),
     organizationId : uuid().references(()=>organizationTable.id),
     createdAt : timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
@@ -30,6 +30,19 @@ export const organizationTable = pgTable("organizations", {
   name: text().notNull(),
   ownerId: uuid().notNull().references(() => userTable.id),
 },);
+
+
+export const UserOrganizationTable = pgTable("user_organization" , {
+  userId : uuid().references(()=>userTable.id , { onDelete : 'cascade'}),
+  organizationId : uuid().references(()=>organizationTable.id , { onDelete : 'cascade'})
+},
+(t)=>[
+  primaryKey(
+    {
+      columns : [t.organizationId , t.userId]
+    }
+  ),
+])
 
 
 
@@ -51,6 +64,10 @@ export const userTableRelations = relations(userTable, ({  many }) => ({
   ownedOrganizations: many(organizationTable, {
     relationName: "organizationOwner",
   }),
+
+  organizationMember : many(UserOrganizationTable , {
+    relationName : 'member_organization'
+  })
 }));
  
 export const documentTableRelations = relations(documentTable, ({ one  }) => ({
@@ -78,5 +95,9 @@ export const organizationTableRelations = relations(organizationTable , ({many ,
     references: [userTable.id],
     relationName: "organizationOwner",
   }),
+
+  members : many(UserOrganizationTable , {
+    relationName : "members"
+  })
     
 }))

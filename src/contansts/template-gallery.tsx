@@ -1,17 +1,17 @@
 "use client"
 
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../components/ui/carousel"
-import { cn } from "../../lib/utils";
-import { templates } from "../../contansts/template";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../components/ui/carousel"
+import { cn } from "../lib/utils";
+import { templates } from "./template";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createDocument } from "../../../drizzle/queries/document";
+import { createDocument } from "../../drizzle/queries/document";
 
 
 
 
 
-export const TemplateGallery = ({id} : {id : string})=>{
+export const TemplateGallery = ({id , organizationId} : {id : string , organizationId ?: string })=>{
     
 
     const router = useRouter()
@@ -39,7 +39,7 @@ export const TemplateGallery = ({id} : {id : string})=>{
                     content: null,
                     ownerId: id, // id must be a non-empty string
                     roomId: null,
-                    organizationId: null,
+                    organizationId: organizationId ?? null,
             }
             const res = await createDocument(data);
             if(res.success && res.data){

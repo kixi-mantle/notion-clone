@@ -2,9 +2,8 @@
 
 import { cookies } from "next/headers"
 import db from "./index";
-import { cache } from "react";
 
-export const getUser = cache(async()=>{
+export const getUser = async() : Promise<{id : string , name : string  , email : string} | undefined | null>  =>{
    const userId = (await cookies()).get("user_id")?.value;
 
 
@@ -15,4 +14,4 @@ export const getUser = cache(async()=>{
     })
 
     return user
-})
+}

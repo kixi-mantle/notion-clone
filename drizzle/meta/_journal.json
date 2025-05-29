@@ -8,6 +8,13 @@
       "when": 1747890653380,
       "tag": "0000_demonic_vampiro",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1748424201690,
+      "tag": "0001_flat_amphibian",
+      "breakpoints": true
     }
   ]
 }

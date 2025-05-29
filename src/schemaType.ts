@@ -6,6 +6,7 @@ export const createDoc = z.object({
 })
 
 export const UserSchema = z.object({
+    
     name : z.string(),
     email : z.string(),
 })
@@ -27,4 +28,16 @@ export const DocumentFull = z.object({
     organizationId : z.string().nullable(),
     id : z.string(),
     createdAt : z.date()
+})
+
+export const organizationData = z.object({
+    name : z.string().min(1),
+    ownerId : z.string().min(1),
+    
+})
+export const organizationFull = z.object({
+    id : z.string()
+,    name : z.string().min(1),
+    ownerId : z.string().min(1),
+    
 })

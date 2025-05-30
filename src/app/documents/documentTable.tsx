@@ -1,4 +1,4 @@
-
+"use client"
 
 
 import { Building2Icon, CircleUserIcon, LoaderIcon } from 'lucide-react'
@@ -9,6 +9,7 @@ import DocumentMenu from './document-menu'
 import { DocumentSchema } from '../../schemaType'
 import { z } from 'zod'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 
 
@@ -17,9 +18,10 @@ function DocumentTable({
     documents
 } : { documents : (z.infer<typeof DocumentSchema> & { id : string , createdAt : Date})[] }) {
 
-    // const onNewTabClick = (id: string) =>{
-    //     window.open(`/documents/${id}`  , "_blank");
-    // }
+    const pathname = usePathname()
+    const cleanPath = pathname.replace(/\/$/, '')
+
+    
   return (
     <div className='max-w-screen-xl  w-full mx-auto px-16 py-6 flex flex-col gap-5'>
       {
@@ -52,7 +54,7 @@ function DocumentTable({
 
                             <TableRow key={document.id} className='rounded-sm px-2'>
                                 <TableCell className='font-medium md:w-[45%]'>
-                                    <Link href={`/documents/${document.id}`} className='hover:text-blue-500 hover:underline'>{document.title}</Link>
+                                    <Link href={`${cleanPath}/documents/${document.id}`} className='hover:text-blue-500 hover:underline'>{document.title}</Link>
                                 </TableCell>
                                 <TableCell className='text-muted-foreground hidden md:flex items-center gap-2'>
                                     {document.organizationId ? <Building2Icon className='size-4'/> : <CircleUserIcon className='size-4'/>}

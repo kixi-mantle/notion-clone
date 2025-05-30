@@ -2,7 +2,7 @@
 
 
 
-export const DocumentInput = ({title}:{title : string})=>{
+export const DocumentInput = ({title}:{title : string | null | undefined})=>{
 
     return (
 

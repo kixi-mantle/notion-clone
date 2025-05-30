@@ -3,7 +3,8 @@
 import db from "../../src/index";
 import { documentTable, organizationTable, UserOrganizationTable } from "../../src/db/schema";
 import { getUser } from "../../src/getUser";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
+
 
 
 
@@ -31,8 +32,17 @@ export const getOrganization = async()=>{
          const user = await getUser();
             if(!user) return []
             const organizations = await db.query.organizationTable.findMany({ where : eq(organizationTable.ownerId , user.id)})
+            const otherOrg = await db.query.UserOrganizationTable.findMany({ where : eq(UserOrganizationTable.userId , user.id)})
+            const validOrgIds = otherOrg.map(org => org.organizationId)
+                                        .filter((id): id is string => id !== null);
+            
+             const memberOrgs = validOrgIds.length > 0
+                                        ? await db.query.organizationTable.findMany({
+                                        where: inArray(organizationTable.id, validOrgIds)
+                                        })
+                                        : [];
 
-            return organizations ?? []
+            return {myOrgs : organizations ?? [] , memberOrgs   } 
 }
 
 export const getOrganizationDocs = async(organizationId : string)=>{

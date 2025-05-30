@@ -14,7 +14,13 @@ app.prepare().then(()=>{
     const io = new Server(httpServer);
 
     io.on("connection", (socket)=>{
-        console.log("in the backend" + socket.id)
+        socket.on("join-room" , (docId)=>{
+            socket.join(docId);
+        });
+
+        socket.on("doc-update" , ({steps , docId})=>{
+            socket.to(docId).emit("doc-update" , {steps})
+        })
     });
 
     httpServer.once("error" , (err)=>{

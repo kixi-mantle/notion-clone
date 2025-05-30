@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { cn } from "../lib/utils";
 import { templates } from "./template";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createDocument } from "../../drizzle/queries/document";
 
 
@@ -18,6 +18,7 @@ export const TemplateGallery = ({id , organizationId} : {id : string , organizat
     
     const [isArrow , setIsArrow] = useState<boolean>(false)
     const CarouselRef = useRef<HTMLDivElement>(null);
+    const pathname = usePathname()
     
     const isCreating = false;
     useEffect(()=>{
@@ -43,7 +44,9 @@ export const TemplateGallery = ({id , organizationId} : {id : string , organizat
             }
             const res = await createDocument(data);
             if(res.success && res.data){
-                router.push(`/documents/${res.data.id}`)
+                
+                const cleanPath = pathname.replace(/\/$/, '')
+                router.push(`${cleanPath}/documents/${res.data.id}`)
             }
           }
     return (
@@ -57,7 +60,7 @@ export const TemplateGallery = ({id , organizationId} : {id : string , organizat
                       {templates.map((template)=>(
                         <CarouselItem
                         key={template.id}
-                        className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/4 xl:basis-1/6 2xl:basis-[14.2857145] pl-4  text-center " onClick={()=>createDoc()}>
+                        className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/4 xl:basis-1/6 2xl:basis-[14.2857145] pl-4  text-center " onClick={async()=>await createDoc()}>
                                     <div className={cn(
                                         "aspect-[3/4] flex flex-col gap-y-2.5",
                                         isCreating && "ponter-events-none opacity-50"

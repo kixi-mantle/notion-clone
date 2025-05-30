@@ -121,7 +121,7 @@ export const Navbar = ()=>{
                
                  
                      <div className="flex flex-col">
-                        <DocumentInput title={doc!.title}/>
+                        <DocumentInput title={doc?.title}/>
                
                 <div className="flex ">
                 <Menubar className="border-none bg-transparent shadow-none h-auto p-0">

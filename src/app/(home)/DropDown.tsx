@@ -31,7 +31,7 @@ import { useRouter } from "next/navigation";
                        {
                         organizations.length > 0 ? (
                             organizations.map((organization)=>(
-                                <div key={organization.id} className="w-full p-2 h-fit hover:bg-slate-200 rounded-md cursor-pointer" onClick={()=> router.replace(`/organization/${organization.id}`)}>
+                                <div key={organization.id} className="w-full p-2 h-fit hover:bg-slate-200 rounded-md cursor-pointer" onClick={()=> router.push(`/organization/${organization.id}`)}>
                                         {organization.name}
                                 </div>
                             )) 

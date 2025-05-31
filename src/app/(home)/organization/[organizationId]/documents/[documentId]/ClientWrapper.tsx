@@ -6,7 +6,7 @@ import { Navbar } from "../../../../../documents/[documentId]/Navbar"
 import { Toolbar } from "../../../../../documents/[documentId]/Toolbar"
 import Editor from "../../../../../documents/[documentId]/editor"
 import { DocumentFull } from "../../../../../../schemaType"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {io , Socket} from "socket.io-client"
 import { useEditorStore } from "../../../../../../../store/use-editor-store"
 import { Step } from "@tiptap/pm/transform"
@@ -18,9 +18,11 @@ function ClientWrapper({
     
     const setDocument = useDataStore((state)=> state.setDocument)
     const document = useDataStore((state)=> state.document)
+    const user = useDataStore((state)=> state.user)
     const {editor} = useEditorStore()
 
     const [socket, setSocket] = useState<Socket | null>(null)
+    const isApplyingRemoteUpdate = useRef(false);
     
     
     useEffect(()=>{
@@ -55,15 +57,21 @@ function ClientWrapper({
     const handleTransaction = ({ transaction } : { transaction : any}) =>{
       if(!transaction.docChanged) return;
 
-      const jsonSteps = transaction.steps.map(step=>step.toJSON())
 
+      if(isApplyingRemoteUpdate.current) return 
+
+      const jsonSteps = transaction.steps.map(step=>step.toJSON())
+      
+      console.log("Emitting doc-update", { steps: jsonSteps, docId });
       socket?.emit('doc-update' , {
         steps : jsonSteps , 
-        docId : docId
+        docId : docId,
+        clientId : user?.id
       })
     }
 
-    const handleDocUpdate = ({steps} : {steps : any[]}) => {
+    const handleDocUpdate = ({steps} : {steps : any[] , userId : string}) => {
+      
       const state = editor.state;
       let tr = state.tr;
 
@@ -73,7 +81,9 @@ function ClientWrapper({
       }
 
       if(tr.docChanged){
+        isApplyingRemoteUpdate.current = true;
         editor.view.dispatch(tr)
+        isApplyingRemoteUpdate.current = false;
       }
     }
 
@@ -87,7 +97,7 @@ function ClientWrapper({
     socket.off('doc-update', handleDocUpdate);
   };
 
-  } , [editor , socket , docId])
+  } , [editor , socket , docId , user])
 
     
   

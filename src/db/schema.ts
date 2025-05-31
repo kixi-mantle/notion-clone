@@ -17,9 +17,9 @@ export const documentTable = pgTable("documents" , {
     id : uuid().primaryKey().defaultRandom(),
     title : text().notNull(),
     content : jsonb().$type<Record<string , unknown>>(),
-    ownerId : uuid().references(()=>userTable.id , { onDelete : 'cascade'}).notNull(),
+    ownerId : uuid().references(()=>userTable.id , { onDelete : 'cascade'}),
     roomId : text(),
-    organizationId : uuid().references(()=>organizationTable.id),
+    organizationId : uuid().references(()=>organizationTable.id , { onDelete : 'cascade'}),
     createdAt : timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 

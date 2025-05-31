@@ -15,6 +15,13 @@
       "when": 1748424201690,
       "tag": "0001_flat_amphibian",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1748678230076,
+      "tag": "0002_unusual_invaders",
+      "breakpoints": true
     }
   ]
 }

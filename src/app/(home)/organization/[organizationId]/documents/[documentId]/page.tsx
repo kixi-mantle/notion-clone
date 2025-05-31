@@ -4,9 +4,8 @@ import { getDocument } from '../../../../../../../drizzle/queries/document'
 import { notFound } from 'next/navigation'
 
 export default async function Page({ params }: { params: { orgId: string; documentId: string } }) {
-  const { documentId } = params;
+  const { documentId } = await params;
   const document = await getDocument(documentId);
-  console.log('document', document);
 
   if (!document) {
     console.log('document not found');
@@ -15,7 +14,7 @@ export default async function Page({ params }: { params: { orgId: string; docume
 
   return (
     <div>
-      <ClientWrapper docInfo={document} />
+      <ClientWrapper docInfo={document} docId = {documentId}/>
     </div>
   );
 }

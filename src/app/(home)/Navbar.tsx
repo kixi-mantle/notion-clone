@@ -19,7 +19,7 @@ import { organizationFull, UserSchema } from "../../schemaType"
 
 
 
-export const Navbar = ({user , organizations} : { user : z.infer<typeof UserSchema> & {id : string} , organizations : z.infer<typeof organizationFull>[]})=>{
+export const Navbar = ({user , organizations} : { user : z.infer<typeof UserSchema> & {id : string} , organizations : {owner : z.infer<typeof organizationFull>[] , member : z.infer<typeof organizationFull>[] }})=>{
 
      const [name , setName] = useState('')
      const [emails , setEmails] = useState<string[]>([]) 

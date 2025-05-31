@@ -14,12 +14,16 @@ app.prepare().then(()=>{
     const io = new Server(httpServer);
 
     io.on("connection", (socket)=>{
+
+       console.log("user-connected" + socket.id)
         socket.on("join-room" , (docId)=>{
             socket.join(docId);
+            console.log("i connented" + socket.id);
+            
         });
 
-        socket.on("doc-update" , ({steps , docId})=>{
-            socket.to(docId).emit("doc-update" , {steps})
+        socket.on("doc-update" , ({steps , docId , userId})=>{
+            socket.to(docId).emit("doc-update" , {steps , userId})
         })
     });
 
